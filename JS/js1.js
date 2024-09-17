@@ -97,7 +97,7 @@ class CalorieTracker
       caloriesRemainingEl.parentElement.parentElement.classList.add('bg-light');
 
       progressEl.classList.remove('bg-danger');
-      progressEl.classList.remove('bg-success');
+      progressEl.classList.add('bg-success');
     }
   }
 
