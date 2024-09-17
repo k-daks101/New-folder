@@ -146,6 +146,99 @@ class CalorieTracker
 }
 
 
+class App
+{
+  constructor()
+  {
+    this._tracker  = new CalorieTracker();
+
+    document.getElementById('meal-form')
+    .addEventListener('submit', this._newMeal.bind(this));
+
+    document.getElementById('workout-form')
+    .addEventListener('submit', this._newWorkout.bind(this));
+
+  }
+
+    _newMeal(e)
+    {
+      e.preventDefault();
+
+     
+
+      const name = document.getElementById('meal-name');
+
+      const calories = document.getElementById('meal-calories');
+
+      //validate input
+
+      if (name.value === '' || calories.value === '')
+      {
+        alert('Please fill ina ll fields');
+        return;
+      }
+
+
+      const meal = new Meal(name.value, parseInt(calories.value));
+
+      this._tracker.addMeal(meal);
+    
+      name.value = '';
+      calories.value = '';
+
+      //collapsing the section
+
+      const collapseMeal = document.getElementById('collapse-meal');
+
+      const bsCollapse = new bootstrap.Collapse(collapseMeal, 
+        {
+          toggle: true
+        }
+      )
+    }
+
+
+  
+    _newWorkout(e)
+    {
+      e.preventDefault();
+
+     
+
+      const name = document.getElementById('workout-name');
+
+      const calories = document.getElementById('workout-calories');
+
+      //validate input
+
+      if (name.value === '' || calories.value === '')
+      {
+        alert('Please fill ina ll fields');
+        return;
+      }
+
+
+      const workout = new Workout(name.value, parseInt(calories.value));
+
+      this._tracker.addWorkout(workout);
+    
+      name.value = '';
+      calories.value = '';
+
+
+      const collapseWorkout = document.getElementById('collapse-workout');
+
+      const bsCollapse = new bootstrap.Collapse(collapseWorkout, 
+        {
+          toggle: true
+        }
+      )
+    }
+  
+}
+
+const app = new App()
+/*
 const tracker = new CalorieTracker();
 
 const breakfast = new Meal('Breakfast', 500);
@@ -166,3 +259,4 @@ console.log(tracker._workouts);
 console.log(tracker._totalCalories);
 
 //console.log(Math.random()).toString(16).slice(2);
+*/
