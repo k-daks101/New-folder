@@ -5,7 +5,7 @@ class CalorieTracker
   {
     this._calorieLimit = Storage.getCalorieLimit(1000);
     this._totalCalories = Storage.getTotalCalories(0);
-    this._meals = [];
+    this._meals = Storage.getMeals();
     this._workouts = []; 
     //constructor runs immediately when you instantiate the class//
 
@@ -26,6 +26,7 @@ class CalorieTracker
     this._meals.push(meal);
     this._totalCalories += meal.calories;
     Storage.updateTotalCalories(this._totalCalories);
+    Storage.saveMeal(meal);
     this._displayNewMeal(meal);
     this._render()
   }
@@ -83,7 +84,13 @@ class CalorieTracker
     this._calorieLimit = calorieLimit;
     Storage.setCalorieLimit(calorieLimit)
     this._displayCaloriesLimit();
-    this._render()
+    this._render();
+  }
+
+
+  loadItems()
+  {
+    this._meals.forEach(meal => this._displayNewMeal(meal));
   }
 
 
@@ -283,6 +290,28 @@ class Storage
   {
     localStorage.setItem('totalCalories',calories)
   }
+
+  static getMeals()
+  {
+    let meals;
+    if(localStorage.getItem('meals') === null)
+    {
+      meals = [];
+    }
+    else
+    {
+      meals = JSON.parse(localStorage.getItem('meals'));
+    }
+    return meals;
+  }
+
+
+  static saveMeal(meal)
+  {
+    const meals = Storage.getMeals();
+    meals.push(meal);
+    localStorage.setItem('meals', JSON.stringify(meals));
+  }
 }
 
 
@@ -291,7 +320,13 @@ class App
   constructor()
   {
     this._tracker  = new CalorieTracker();
+    this._loadEventListeners()
+    this._tracker.loadItems();
+  }
 
+  _loadEventListeners()
+  {
+    
     document.getElementById('meal-form')
     .addEventListener('submit', this._newMeal.bind(this)); //with bind, we can create parameters and pass in arguments
 
@@ -318,8 +353,6 @@ class App
 
     document.getElementById('limit-form')
     .addEventListener('submit', this._setLimit.bind(this));
-
-
   }
 
     _newMeal(e)
