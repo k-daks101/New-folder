@@ -71,6 +71,13 @@ class CalorieTracker
     this._totalCalories = 0;
     this.meals = [];
     this.workouts = [];
+    this._render();
+  }
+
+  setLimit(calorieLimit)
+  {
+    this._calorieLimit = calorieLimit;
+    this._displayCaloriesLimit();
     this._render()
   }
 
@@ -261,6 +268,12 @@ class App
 
     document.getElementById('reset')
     .addEventListener('click', this._reset.bind(this));
+
+
+    document.getElementById('limit-form')
+    .addEventListener('submit', this._setLimit.bind(this));
+
+
   }
 
     _newMeal(e)
@@ -389,6 +402,28 @@ class App
       document.getElementById('filter-meals').value = '';
 
       document.getElementById('filter-workouts').value = '';
+    }
+
+
+
+    _setLimit(e)
+    {
+      e.preventDefault();
+
+      const limit = document.getElementById('limit');
+
+      if(limit.value === '')
+      {
+        alert('Please add a limit');
+        return;
+      }
+
+      this._tracker.setLimit(+limit.value); //when you pass data in a form, it comes as a string, so we put a + sign to get a number
+      limit.value ='';
+
+      const modalEl = document.getElementById('limit-modal');
+      const modal = bootstrap.getInstance(modalEl);
+      modal.hide();
     }
 }
 
