@@ -3,7 +3,7 @@ class CalorieTracker
   
   constructor()
   {
-    this._calorieLimit = 2001;
+    this._calorieLimit = Storage.getCalorieLimit(1000);
     this._totalCalories = 0;
     this._meals = [];
     this._workouts = []; 
@@ -77,6 +77,7 @@ class CalorieTracker
   setLimit(calorieLimit)
   {
     this._calorieLimit = calorieLimit;
+    Storage.setCalorieLimit(calorieLimit)
     this._displayCaloriesLimit();
     this._render()
   }
@@ -237,6 +238,28 @@ class CalorieTracker
     }  
 
 
+}
+
+class Storage
+{
+  //not static cause it is not one entity
+  static getCalorieLimit(defaultLimit = 2000)
+  {
+    let calorieLimit;
+    if(localStorage.getItem('calorieLimit') === null)
+    {
+      calorieLimit = defaultLimit;
+    }
+    else
+    {
+      calorieLimit = +localStorage.getItem('calorieLimit');
+    }
+    return calorieLimit;
+  }
+  static setCalorieLimit(calorieLimit)
+  {
+    localStorage.setItem('calorieLimit', calorieLimit);
+  }
 }
 
 
