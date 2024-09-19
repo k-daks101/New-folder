@@ -6,7 +6,8 @@ class CalorieTracker
     this._calorieLimit = Storage.getCalorieLimit(1000);
     this._totalCalories = Storage.getTotalCalories(0);
     this._meals = Storage.getMeals();
-    this._workouts = []; 
+    this._workouts = Storage.getWorkouts();
+    
     //constructor runs immediately when you instantiate the class//
 
     this._displayCaloriesLimit();
@@ -36,6 +37,7 @@ class CalorieTracker
     this._workouts.push(workout);
     this._totalCalories -= workout.calories;
     Storage.updateTotalCalories(this._totalCalories);
+    Storage.saveWorkout(workout);
     this._displayNewWorkout(workout);
     this._render();
   }
@@ -91,6 +93,7 @@ class CalorieTracker
   loadItems()
   {
     this._meals.forEach(meal => this._displayNewMeal(meal));
+    this._workouts.forEach(workout => this._displayNewWorkout(workout));
   }
 
 
@@ -312,6 +315,28 @@ class Storage
     meals.push(meal);
     localStorage.setItem('meals', JSON.stringify(meals));
   }
+
+  static getWorkouts()
+  {
+    let workouts;
+    if(localStorage.getItem('workouts') === null)
+    {
+      workouts = [];
+    }
+    else
+    {
+      workouts = JSON.parse(localStorage.getItem('workouts'));
+    }
+    return workouts;
+  }
+
+  static saveWorkout(workout)
+  {
+    const workouts = Storage.getWorkouts();
+    workouts.push(workout);
+    localStorage.setItem('workouts', JSON.stringify(workouts));
+  }
+
 }
 
 
@@ -528,4 +553,8 @@ console.log(tracker._workouts);
 console.log(tracker._totalCalories);
 
 //console.log(Math.random()).toString(16).slice(2);
+
+
 */
+
+//Just some notes:: we add, we add, we display, we load, and then we reuse
