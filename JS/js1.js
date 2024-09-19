@@ -17,6 +17,9 @@ class CalorieTracker
     this._displayCaloriesRemaining();
     this._displayCaloriesProgress();
 
+
+    document.getElementById('limit').value = this._calorieLimit;
+
   }
 
 
@@ -80,6 +83,7 @@ class CalorieTracker
     this._totalCalories = 0;
     this.meals = [];
     this.workouts = [];
+    Storage.clearAll();
     this._render();
   }
 
@@ -366,9 +370,19 @@ class Storage
     });
 
     //we are going outside the forEach to save to the local storage without that Workout
-    localStorage.setItem('workouts', JSON.stringify(Workouts))
+    localStorage.setItem('workouts', JSON.stringify(Workouts));
   }
 
+  static clearAll()
+  {
+    
+    localStorage.removeItem('totalCalories');
+    localStorage.removeItem('meals');
+    localStorage.removeItem('workouts');
+
+    //if you want to clear the limit
+    // localStorage.clear();
+  }
 
 }
 
