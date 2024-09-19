@@ -52,6 +52,7 @@ class CalorieTracker
       this._totalCalories -= meal.calories;
       Storage.updateTotalCalories(this._totalCalories);
       this._meals.splice(index, 1);
+      Storage.removeMeal(id);
       this._render()
     }
   }
@@ -67,6 +68,7 @@ class CalorieTracker
       const workout = this._workouts[index];
       this._totalCalories += workout.calories;
       Storage.updateTotalCalories(this._totalCalories);
+      Storage.removeWorkout(id)
       this._workouts.splice(index, 1);
       this._render()
     }
@@ -316,6 +318,21 @@ class Storage
     localStorage.setItem('meals', JSON.stringify(meals));
   }
 
+  static removeMeal(id)
+  {
+    const meals = Storage.getMeals();
+    meals.forEach((meal, index) =>
+    {
+      if (meal.id=== id)
+      {
+        meals.splice(index, 1)
+      }
+    });
+
+    //we are going outside the forEach to save to the local storage without that meal
+    localStorage.setItem('meals', JSON.stringify(meals))
+  }
+
   static getWorkouts()
   {
     let workouts;
@@ -336,6 +353,22 @@ class Storage
     workouts.push(workout);
     localStorage.setItem('workouts', JSON.stringify(workouts));
   }
+
+  static  removeWorkout(id)
+  {
+    const Workouts = Storage.getWorkouts();
+    Workouts.forEach((Workout, index) =>
+    {
+      if (Workout.id=== id)
+      {
+        Workouts.splice(index, 1)
+      }
+    });
+
+    //we are going outside the forEach to save to the local storage without that Workout
+    localStorage.setItem('workouts', JSON.stringify(Workouts))
+  }
+
 
 }
 
